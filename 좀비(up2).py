@@ -14,7 +14,7 @@ def load_report(filepath):
                          '체력':int(row['health']),
                          '식량':int(row['food']),
                          '해독제':int(row['antidote']),
-                         '감염':row['infected'.strip()],
+                         '감염':row['infected'].strip(),
                          '연속감염':0
                          }
             start_member.append(fieldname)
@@ -70,7 +70,7 @@ def daily_routine(member_status):
                     status['식량'] -= 1
                     status['체력'] += 15
 
-            if random.random() <= 0.:
+            if random.random() <= 0.1:
                 status['해독제'] += 1
             
 
@@ -166,7 +166,7 @@ def special_routine(member_status):
                 if victim['해독제'] >= 1:
                     robber['해독제'] += 1
                     victim['해독제'] -= 1
-                    print(f"{robber['직업']}이 {victim['직업']} {victim['이름']}의 해독제 강탈했습니다.")
+                    print(f"{robber['직업']}이 {victim['직업']} {victim['이름']}의 해독제를 강탈했습니다.")
                 else:
                     print(f"{robber['직업']}이 {victim['직업']} {victim['이름']}의 해독제를 강탈하려 했으나 허탕입니다.")
     
@@ -219,6 +219,7 @@ def check_infected(member_status):
                         if status['감염'] == 'False':
                             status['연속감염'] = 0
                             print(f"{status['직업']} {status['이름']}님이 요리로 감염을 이겨냈습니다.")
+                            break
                         elif status['식량'] == 0:
                             status['연속감염'] += 1
                             print(f"{status['직업']} {status['이름']}님이 감염을 이겨내려다 식량을 탕진하였습니다.")
@@ -229,6 +230,8 @@ def check_infected(member_status):
             if status['감염'] == 'False':
                 status['연속감염'] = 0
                 status['감염'] = str(bool(random.randint(0,1)))
+                if status['감염'] == 'True':
+                    print(f"{status['이름']}이 감염되었습니다.")
 
             elif status['감염'] == 'True':
                 if status['해독제'] >= 1:
@@ -236,6 +239,7 @@ def check_infected(member_status):
                     status['감염'] = 'False'
                     status['연속감염'] = 0
                 else:
+                    print(f"{status['이름']}이 감염되었습니다.")
                     status['연속감염'] += 1
 
     return member_status
@@ -304,7 +308,8 @@ def main():
         status = start
         status1 = daily_routine(status)
         status2 = special_routine(status1)
-        end = check_death(status2)
+        status3 = check_infected(status2)
+        end = check_death(status3)
         start = end           
 
     savepath = f'D:\\git_desktop\\day_{day+input_day}_report.csv'
