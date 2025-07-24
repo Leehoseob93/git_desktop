@@ -206,14 +206,13 @@ def check_infected(member_status):
             if status['감염'] == 'False':
                 status['연속감염'] = 0
                 status['감염'] = str(bool(random.randint(0,1)))
-                print(f"{status['이름']}이 감염되었습니다.")
             elif status['감염'] == 'True':
                 if status['해독제'] >= 1:
                     status['해독제'] -= 1
                     status['감염'] = 'False'
                     status['연속감염'] = 0
                 elif status['식량'] >= 1:
-                    while status['감염'] == 'True' or status['식량'] > 0:
+                    while status['감염'] == 'True' and status['식량'] > 0:
                         status['식량'] -= 1
                         status['감염'] = str(bool(random.randint(0,1)))
                         if status['감염'] == 'False':
@@ -230,8 +229,6 @@ def check_infected(member_status):
             if status['감염'] == 'False':
                 status['연속감염'] = 0
                 status['감염'] = str(bool(random.randint(0,1)))
-                if status['감염'] == 'True':
-                    print(f"{status['이름']}이 감염되었습니다.")
 
             elif status['감염'] == 'True':
                 if status['해독제'] >= 1:
@@ -239,7 +236,6 @@ def check_infected(member_status):
                     status['감염'] = 'False'
                     status['연속감염'] = 0
                 else:
-                    print(f"{status['이름']}이 감염되었습니다.")
                     status['연속감염'] += 1
 
     return member_status
@@ -256,11 +252,11 @@ def check_death(member_status):
             dead_list.append(status)
 
         elif status['직업'] == '의사':
-            if status['연속감염'] == 6:
+            if status['연속감염'] == 10:
                 print(f"{status['직업']} {status['이름']}님이 감염되어 죽었습니다......")
                 dead_list.append(status)
         else:
-            if status['연속감염'] == 4:
+            if status['연속감염'] == 7:
                 print(f"{status['직업']} {status['이름']}님이 감염되어 죽었습니다......")
                 dead_list.append(status)
 
